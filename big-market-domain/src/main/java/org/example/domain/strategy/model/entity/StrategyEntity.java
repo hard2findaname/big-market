@@ -1,0 +1,41 @@
+package org.example.domain.strategy.model.entity;
+
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.example.types.common.Constants;
+
+
+/**
+ * @Author atticus
+ * @Date 2024/09/29 17:24
+ * @description: 抽奖策略实体
+ */
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class StrategyEntity {
+
+    /** 抽奖策略ID */
+    private Long strategyId;
+    /** 抽奖策略描述 */
+    private String strategyDesc;
+    /**抽奖策略描述模型*/
+    private String ruleModels;
+
+    public String[] ruleModels(){
+        if(StringUtils.isBlank(ruleModels))return null;
+        return ruleModels.split(Constants.SPLIT);
+    }
+
+    public String getRuleWeight(){
+        String[] ruleModels = this.ruleModels();
+        for(String ruleModel : ruleModels){
+            if("rule_weight".equals(ruleModel)) return ruleModel;
+        }
+        return null;
+    }
+}

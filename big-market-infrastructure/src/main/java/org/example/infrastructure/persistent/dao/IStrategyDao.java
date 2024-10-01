@@ -14,5 +14,10 @@ import java.util.List;
 public interface IStrategyDao {
     List<Strategy> queryStrategyList();
 
+    /**
+     * @description: 从 strategy 表中通过 strategyId 查询 strategy_id, strategy_desc, rule_models
+     * @param: strategyId
+     * @return: Strategy
+     **/
     Strategy queryStrategyByStrategyId(Long strategyId);
 }
