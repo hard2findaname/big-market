@@ -3,3 +3,4 @@
 /big-market-infrastructure/target/classes/org/example/infrastructure/persistent/
 /data/log/
 /big-market-domain/target/classes/org/example/domain/strategy/
+/.idea/

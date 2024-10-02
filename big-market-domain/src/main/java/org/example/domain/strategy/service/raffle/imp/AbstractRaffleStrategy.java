@@ -1,15 +1,17 @@
 package org.example.domain.strategy.service.raffle.imp;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.example.domain.strategy.model.entity.RaffleAwardEntity;
 import org.example.domain.strategy.model.entity.RaffleFactorEntity;
 import org.example.domain.strategy.model.entity.RuleActionEntity;
 import org.example.domain.strategy.model.entity.StrategyEntity;
 import org.example.domain.strategy.model.valobj.RuleLogicCheckTypeVO;
+import org.example.domain.strategy.model.valobj.StrategyAwardRuleModelVO;
 import org.example.domain.strategy.repository.IStrategyRepository;
 import org.example.domain.strategy.service.assembly.IStrategyDispatch;
-import org.example.domain.strategy.service.raffle.IRaffleStrategy;
-import org.example.domain.strategy.service.rule.factory.DefaultLogicFactory;
+import org.example.domain.strategy.service.IRaffleStrategy;
+import org.example.domain.strategy.service.rule.filter.factory.DefaultLogicFactory;
 import org.example.types.enums.ResponseCode;
 import org.example.types.exception.AppException;
 
@@ -18,6 +20,7 @@ import org.example.types.exception.AppException;
  * @Date 2024/09/29 23:54
  * @description:
  */
+@Slf4j
 public abstract class AbstractRaffleStrategy implements IRaffleStrategy {
 
     // 策略仓储服务 -> domain层像一个大厨，仓储层提供米面粮油
@@ -62,8 +65,33 @@ public abstract class AbstractRaffleStrategy implements IRaffleStrategy {
             }
         }
 
+
+
+
+
+
         // 4. 默认抽奖流程
         Integer awardId = strategyDispatch.getRandomAwardId(strategyId);
+
+
+
+
+
+
+        //5.过滤抽奖中规则
+        StrategyAwardRuleModelVO strategyAwardRuleModelVO = strategyRepository.queryStrategyAwardRuleModelVO(strategyId,awardId);
+
+        //6.抽奖中-规则过滤
+        RuleActionEntity<RuleActionEntity.RaffleWhileEntity> raffleWhileEntityRuleActionEntity= this.doCheckRaffleDuringLogic(RaffleFactorEntity.builder()
+                        .userId(userId)
+                        .strategyId(strategyId)
+                        .awardId(awardId)
+                .build(), strategyAwardRuleModelVO.raffleDuringRuleModelList());
+        if (RuleLogicCheckTypeVO.TAKE_OVER.getCode().equals(raffleWhileEntityRuleActionEntity.getCode())) {
+            log.info("【临时日志】中奖中规则拦截，通过抽奖后规则 rule_luck_award 走兜底奖励。");
+            return RaffleAwardEntity.builder().awardDesc("中奖中规则拦截，通过抽奖后规则 rule_luck_award 走兜底奖励。")
+                    .build();
+        }
 
         return RaffleAwardEntity.builder()
                 .awardId(awardId)
@@ -71,4 +99,5 @@ public abstract class AbstractRaffleStrategy implements IRaffleStrategy {
 
     }
     protected abstract RuleActionEntity<RuleActionEntity.RaffleBeforeEntity> doCheckRaffleBeforeLogic(RaffleFactorEntity raffleFactorEntity, String... logics);
+    protected abstract RuleActionEntity<RuleActionEntity.RaffleWhileEntity> doCheckRaffleDuringLogic(RaffleFactorEntity raffleFactorEntity, String... logics);
 }
