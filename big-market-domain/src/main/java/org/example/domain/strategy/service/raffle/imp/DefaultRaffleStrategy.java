@@ -7,7 +7,9 @@ import org.example.domain.strategy.model.entity.RuleActionEntity;
 import org.example.domain.strategy.model.entity.RuleMatterEntity;
 import org.example.domain.strategy.model.valobj.RuleLogicCheckTypeVO;
 import org.example.domain.strategy.repository.IStrategyRepository;
+import org.example.domain.strategy.service.AbstractRaffleStrategy;
 import org.example.domain.strategy.service.assembly.IStrategyDispatch;
+import org.example.domain.strategy.service.rule.chain.factory.DefaultLogicChainFactory;
 import org.example.domain.strategy.service.rule.filter.ILogicFilter;
 import org.example.domain.strategy.service.rule.filter.factory.DefaultLogicFactory;
 import org.springframework.stereotype.Service;
@@ -32,8 +34,8 @@ public class DefaultRaffleStrategy extends AbstractRaffleStrategy {
     private DefaultLogicFactory defaultLogicFactory;
 
     // 黑名单优先过滤
-    public DefaultRaffleStrategy(IStrategyRepository strategyRepository, IStrategyDispatch strategyDispatch) {
-        super(strategyRepository, strategyDispatch);
+    public DefaultRaffleStrategy(IStrategyRepository strategyRepository, IStrategyDispatch strategyDispatch, DefaultLogicChainFactory defaultLogicChainFactory) {
+        super(strategyRepository, strategyDispatch, defaultLogicChainFactory);
     }
 
     @Override
