@@ -21,6 +21,11 @@ import org.example.types.exception.AppException;
  */
 public interface IRaffleStrategy {
 
+    /**
+     * @description: 执行抽奖；用抽奖因子入参，执行抽奖计算，返回奖品信息
+     * @param: raffleFactorEntity 抽奖因子实体对象，根据入参信息计算抽奖结果
+     * @return: RaffleAwardEntity 抽奖的奖品
+     **/
     RaffleAwardEntity performRaffle(RaffleFactorEntity raffleFactorEntity);
 
 

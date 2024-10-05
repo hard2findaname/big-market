@@ -4,11 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.example.domain.strategy.service.rule.filter.factory.DefaultLogicFactory;
-import org.example.types.common.Constants;
 
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @Author atticus
@@ -20,15 +16,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class StrategyAwardRuleModelVO {
+
     private String ruleModel;
-    public String[] raffleDuringRuleModelList(){
-        List<String> ruleModelList = new ArrayList<>();
-        String[] ruleModelValues = ruleModel.split(Constants.SPLIT);
-        for(String ruleModelValue : ruleModelValues){
-            if(DefaultLogicFactory.LogicModel.isDuring(ruleModelValue)){
-                ruleModelList.add(ruleModelValue);
-            }
-        }
-        return ruleModelList.toArray(new String[0]);
-    }
 }

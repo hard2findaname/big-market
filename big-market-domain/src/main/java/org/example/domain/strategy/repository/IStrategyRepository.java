@@ -3,6 +3,7 @@ package org.example.domain.strategy.repository;
 import org.example.domain.strategy.model.entity.StrategyAwardEntity;
 import org.example.domain.strategy.model.entity.StrategyEntity;
 import org.example.domain.strategy.model.entity.StrategyRuleEntity;
+import org.example.domain.strategy.model.valobj.RuleTreeVO;
 import org.example.domain.strategy.model.valobj.StrategyAwardRuleModelVO;
 
 import java.util.List;
@@ -35,4 +36,11 @@ public interface IStrategyRepository {
     String queryStrategyRuleValue(Long strategyId,  String ruleModel);
 
     StrategyAwardRuleModelVO queryStrategyAwardRuleModelVO(Long strategyId, Integer awardId);
+
+    /**
+     * @description: 根据规则树ID，查询树结构信息
+     * @param: treeId 规则树ID
+     * @return: RuleTreeVO 树结构信息
+     **/
+    RuleTreeVO queryRuleTreeVOByTreeId(String treeId);
 }

@@ -1,5 +1,7 @@
 package org.example.domain.strategy.service.rule.chain;
 
+import org.example.domain.strategy.service.rule.chain.factory.DefaultLogicChainFactory;
+
 /**
  * @Author atticus
  * @Date 2024/10/02 23:54
@@ -13,7 +15,7 @@ public interface ILogicChain extends ILogicChainAssembly{
      * @param: strategyId   策略ID
      * @return: Integer     奖品ID
      **/
-    Integer logic(String userId, Long strategyId);
+    DefaultLogicChainFactory.StrategyAwardVO logic(String userId, Long strategyId);
 
 
 }
