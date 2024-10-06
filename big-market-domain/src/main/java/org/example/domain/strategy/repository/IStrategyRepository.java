@@ -5,6 +5,7 @@ import org.example.domain.strategy.model.entity.StrategyEntity;
 import org.example.domain.strategy.model.entity.StrategyRuleEntity;
 import org.example.domain.strategy.model.valobj.RuleTreeVO;
 import org.example.domain.strategy.model.valobj.StrategyAwardRuleModelVO;
+import org.example.domain.strategy.model.valobj.StrategyAwardStockKeyVO;
 
 import java.util.List;
 import java.util.Map;
@@ -15,7 +16,7 @@ import java.util.Map;
  * @description: 策略仓储接口
  */
 public interface IStrategyRepository {
-    List<StrategyAwardEntity> queryStrategyAwardList(Long startegyId);
+    List<StrategyAwardEntity> queryStrategyAwardList(Long strategyId);
 
     void storeStrategyAwardSearchRateTable(String key, Integer rateRange, Map<Integer, Integer> strategyAwardSearchRateTable);
 
@@ -43,4 +44,19 @@ public interface IStrategyRepository {
      * @return: RuleTreeVO 树结构信息
      **/
     RuleTreeVO queryRuleTreeVOByTreeId(String treeId);
+    /**
+     * @description: 缓存奖品库存
+     * @param: cacheKey     自定义的reids key
+     * @param: awardCount   库存值
+     * @return: void
+     **/
+    void cacheStrategyAwardCount(String cacheKey, Integer awardCount);
+
+    Boolean subAwardStock(String cacheKey);
+
+    void awardStockConsumeSendQueue(StrategyAwardStockKeyVO strategyAwardStockKeyVO);
+
+    StrategyAwardStockKeyVO takeQueueValue();
+
+    void updateStrategyAwardStock(Long strategyId, Integer awardId);
 }

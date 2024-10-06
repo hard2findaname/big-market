@@ -16,5 +16,5 @@ public interface IStrategyDispatch {
 
     Integer getRandomAwardId(Long strategyId,String ruleWeightValue);
 
-
+    Boolean subAwardStock(Long strategyId, Integer awardId);
 }

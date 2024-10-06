@@ -7,6 +7,7 @@ import org.example.domain.strategy.model.entity.StrategyRuleEntity;
 import org.example.domain.strategy.repository.IStrategyRepository;
 import org.example.domain.strategy.service.assembly.IStrategyAssembly;
 import org.example.domain.strategy.service.assembly.IStrategyDispatch;
+import org.example.types.common.Constants;
 import org.example.types.enums.ResponseCode;
 import org.example.types.exception.AppException;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,15 @@ public class StrategyAssemblyImpl implements IStrategyAssembly, IStrategyDispatc
     public boolean assembleLotteryStrategy(Long strategyId) {
         //1、查询策略配置
         List<StrategyAwardEntity> strategyAwardEntities = strategyRepository.queryStrategyAwardList(strategyId);
+
+        //2、缓存奖品设【用于扣减库存】
+        for(StrategyAwardEntity strategyAward: strategyAwardEntities){
+            Integer awardId = strategyAward.getAwardId();
+            Integer awardCount = strategyAward.getAwardCount();
+            cacheStrategyAwardCount(strategyId, awardId, awardCount);
+        }
+
+
         assembleLotteryStrategy(String.valueOf(strategyId), strategyAwardEntities);
         //2、权重配置， rule_weight权重规则配置
         StrategyEntity strategyEntity = strategyRepository.queryStrategyByStrategyId(strategyId);
@@ -55,6 +65,13 @@ public class StrategyAssemblyImpl implements IStrategyAssembly, IStrategyDispatc
         return true;
 
     }
+
+    private void cacheStrategyAwardCount(Long strategyId, Integer awardId, Integer awardCount) {
+        String cacheKey = Constants.RedisKey.STRATEGY_AWARD_COUNT_KEY + strategyId + Constants.UNDERLINE + awardId;
+        strategyRepository.cacheStrategyAwardCount(cacheKey,awardCount);
+
+    }
+
     /**
      * 计算公式；
      * 1. 找到范围内最小的概率值，比如 0.1、0.02、0.003，需要找到的值是 0.003
@@ -124,6 +141,14 @@ public class StrategyAssemblyImpl implements IStrategyAssembly, IStrategyDispatc
         return getRandomAwardIdFromRedis(key);
 
     }
+
+    @Override
+    public Boolean subAwardStock(Long strategyId, Integer awardId) {
+        String cacheKey = Constants.RedisKey.STRATEGY_AWARD_COUNT_KEY + strategyId + Constants.UNDERLINE + awardId;
+
+        return strategyRepository.subAwardStock(cacheKey);
+    }
+
     public Integer getRandomAwardIdFromRedis(String key){
         // 分布式部署下，不一定为当前应用做的策略装配。也就是值不一定会保存到本应用，而是分布式应用，所以需要从 Redis 中获取。
         int rateRange = strategyRepository.getRateRange(key);

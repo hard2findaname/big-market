@@ -155,6 +155,20 @@ public class RedissonService implements IRedisService{
         return redissonClient.getBloomFilter(key);
     }
 
+    @Override
+    public Long getAtomicLong(String cacheKey) {
+        return redissonClient.getAtomicLong(cacheKey).get();
+    }
+
+    @Override
+    public void setAtomicLong(String cacheKey, Integer awardCount) {
+        redissonClient.getAtomicLong(cacheKey).set(awardCount);
+    }
+
+    @Override
+    public Boolean setNx(String lockKey) {
+        return redissonClient.getBucket(lockKey).setIfAbsent("lock");
+    }
 
 
 }
