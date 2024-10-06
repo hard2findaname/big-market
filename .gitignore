@@ -4,3 +4,11 @@
 /data/log/
 /big-market-domain/target/classes/org/example/domain/strategy/
 /.idea/
+/big-market-types/target/
+/big-market-trigger/target/
+/big-market-infrastructure/target/
+/big-market-domain/target/
+/big-market-domain/big-market-domain.iml
+/big-market-infrastructure/big-market-infrastructure.iml
+/big-market-trigger/big-market-trigger.iml
+/big-market-app/big-market-app.iml
