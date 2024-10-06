@@ -46,6 +46,6 @@ public class BlackListLogicChain extends AbstractLogicChain {
 
     @Override
     protected String ruleModel() {
-        return "rule_blacklist";
+        return DefaultLogicChainFactory.LogicModel.RULE_BLACKLIST.getCode();
     }
 }

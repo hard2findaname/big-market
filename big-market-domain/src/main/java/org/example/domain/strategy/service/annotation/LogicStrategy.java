@@ -1,6 +1,6 @@
 package org.example.domain.strategy.service.annotation;
 
-import org.example.domain.strategy.service.rule.filter.factory.DefaultLogicFactory;
+import org.example.domain.strategy.service.rule.chain.factory.DefaultLogicChainFactory;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -16,5 +16,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 
 public @interface LogicStrategy {
-    DefaultLogicFactory.LogicModel logicMode();
+    DefaultLogicChainFactory.LogicModel logicMode();
 }
