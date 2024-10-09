@@ -12,3 +12,4 @@
 /big-market-infrastructure/big-market-infrastructure.iml
 /big-market-trigger/big-market-trigger.iml
 /big-market-app/big-market-app.iml
+/big-market-api/target/classes/org/example/trigger/api/

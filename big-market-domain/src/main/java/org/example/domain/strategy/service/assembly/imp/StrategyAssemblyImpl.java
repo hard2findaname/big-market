@@ -141,6 +141,11 @@ public class StrategyAssemblyImpl implements IStrategyAssembly, IStrategyDispatc
         return getRandomAwardIdFromRedis(key);
 
     }
+    @Override
+    public Integer getRandomAwardId(String key) {
+        return getRandomAwardIdFromRedis(key);
+
+    }
 
     @Override
     public Boolean subAwardStock(Long strategyId, Integer awardId) {

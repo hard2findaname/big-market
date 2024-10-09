@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="big-market-infrastructure" />
+        <module name="big-market-api" />
         <module name="big-market-app" />
         <module name="big-market-trigger" />
         <module name="big-market-domain" />
@@ -17,7 +18,8 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="big-market" options="-parameters" />
+      <module name="big-market" options="" />
+      <module name="big-market-api" options="-parameters" />
       <module name="big-market-app" options="-parameters" />
       <module name="big-market-domain" options="-parameters" />
       <module name="big-market-infrastructure" options="-parameters" />
