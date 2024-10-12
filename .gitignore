@@ -13,3 +13,5 @@
 /big-market-trigger/big-market-trigger.iml
 /big-market-app/big-market-app.iml
 /big-market-api/target/classes/org/example/trigger/api/
+/big-market-api/target/
+/big-market-types/big-market-types.iml
