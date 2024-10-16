@@ -40,10 +40,10 @@
 
     <developers>
         <developer>
-            <name>xiaofuge</name>
-            <email>184172133@qq.com</email>
-            <organization>fuzhengwei</organization>
-            <organizationUrl>https://github.com/fuzhengwei</organizationUrl>
+            <name>atticus</name>
+            <email>2982493959@qq.com</email>
+            <organization>a-a</organization>
+            <organizationUrl></organizationUrl>
         </developer>
     </developers>
 
@@ -115,7 +115,28 @@
                 <artifactId>commons-codec</artifactId>
                 <version>1.15</version>
             </dependency>
+            <dependency>
+                <groupId>org.jeasy</groupId>
+                <artifactId>easy-random-core</artifactId>
+                <version>4.3.0</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/cn.bugstack.middleware/db-router-spring-boot-starter -->
+            <dependency>
+                <groupId>cn.bugstack.middleware</groupId>
+                <artifactId>db-router-spring-boot-starter</artifactId>
+                <version>1.0.2</version>
+            </dependency>
 
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>shardingsphere-jdbc-core-spring-boot-starter</artifactId>
+                <version>5.2.1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>1.33</version>
+            </dependency>
             <!-- 工程模块 -->
             <dependency>
                 <groupId>org.example</groupId>
