@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 @Data
 public class AppException extends RuntimeException {
 
-    private static final long serialVersionUID = 5317680961212299217L;
+//    private static final long serialVersionUID = 5317680961212299217L;
 
     /** 异常码 */
     private String code;
