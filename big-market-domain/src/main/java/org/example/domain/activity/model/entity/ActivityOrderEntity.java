@@ -34,6 +34,8 @@ public class ActivityOrderEntity {
      */
     private String activityName;
 
+    private Long sku;
+
     /**
      * 抽奖策略ID
      */
@@ -68,5 +70,11 @@ public class ActivityOrderEntity {
      * 订单状态
      */
     private OrderStateVO state;
+
+    /**
+     * 业务仿重ID - 外部透传的，确保幂等
+     */
+    private String outBusinessNo;
+
 
 }
