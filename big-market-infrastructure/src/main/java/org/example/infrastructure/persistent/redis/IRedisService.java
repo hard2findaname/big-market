@@ -2,6 +2,8 @@ package org.example.infrastructure.persistent.redis;
 
 import org.redisson.api.*;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @Author atticus
  * @Date 2024/09/28 18:35
@@ -250,4 +252,6 @@ public interface IRedisService {
     void setAtomicLong(String cacheKey, Integer awardCount);
 
     Boolean setNx(String lockKey);
+
+    boolean setAtomicLong(String lockKey, long expireTimeMillis);
 }

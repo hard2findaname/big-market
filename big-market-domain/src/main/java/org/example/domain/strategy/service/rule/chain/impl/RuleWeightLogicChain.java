@@ -29,7 +29,7 @@ public class RuleWeightLogicChain extends AbstractLogicChain {
 
         String ruleValue = strategyRepository.queryStrategyRuleValue(strategyId, ruleModel());
 
-        // 1. 根据用户ID查询用户抽奖消耗的积分值,先写死为固定的值。后续需要从数据库中查询。
+        // 1. 根据用户ID查询用户抽奖消耗的积分值。
         Map<Long, String> analyticalValueGroup = getAnalyticalValue(ruleValue);
         if (null == analyticalValueGroup || analyticalValueGroup.isEmpty()) {
             return null;

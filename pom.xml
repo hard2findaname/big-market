@@ -137,6 +137,12 @@
                 <artifactId>snakeyaml</artifactId>
                 <version>1.33</version>
             </dependency>
+            <!--rabbitmq引入 -->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-amqp</artifactId>
+                <version>3.2.0</version>
+            </dependency>
             <!-- 工程模块 -->
             <dependency>
                 <groupId>org.example</groupId>

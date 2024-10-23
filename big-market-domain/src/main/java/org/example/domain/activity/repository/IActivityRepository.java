@@ -4,6 +4,9 @@ import org.example.domain.activity.model.aggregate.CreateOrderAggregate;
 import org.example.domain.activity.model.entity.ActivityCountEntity;
 import org.example.domain.activity.model.entity.ActivityEntity;
 import org.example.domain.activity.model.entity.ActivitySkuEntity;
+import org.example.domain.activity.model.valobj.ActivitySKUStockKeyVO;
+
+import java.util.Date;
 
 /**
  * @Author atticus
@@ -18,4 +21,18 @@ public interface IActivityRepository {
     ActivityCountEntity queryRaffleActivityCountByActivityCountId(Long activityCountId);
 
     void doSaveOrder(CreateOrderAggregate createOrderAggregate);
+
+    void cacheActivitySKUStockCount(String cacheKey, Integer stockCount);
+
+    boolean subActivitySKUStock(Long sku,String cacheKey, Date endDateTime);
+
+    void activitySKUStockConsumeSendQueue(ActivitySKUStockKeyVO activitySKUStockKeyVO);
+
+    ActivitySKUStockKeyVO takeQueueValue();
+
+    void clearQueueValue();
+
+    void updateActivitySkuStock(Long sku);
+
+    void clearActivitySkuStock(Long sku);
 }

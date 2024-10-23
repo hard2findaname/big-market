@@ -1,0 +1,38 @@
+package org.example.domain.activity.service;
+
+import org.example.domain.activity.model.valobj.ActivitySKUStockKeyVO;
+
+/**
+ * @Author atticus
+ * @Date 2024/10/23 23:23
+ * @description: 活动sku库存处理接口
+ */
+public interface ISKUStock {
+    /**
+     * 获取活动sku库存消耗队列
+     *
+     * @return 奖品库存Key信息
+     * @throws InterruptedException 异常
+     */
+    ActivitySKUStockKeyVO takeQueueValue() throws InterruptedException;
+
+    /**
+     * 清空队列
+     */
+    void clearQueueValue();
+
+    /**
+     * 延迟队列 + 任务趋势更新活动sku库存
+     *
+     * @param sku 活动商品
+     */
+    void updateActivitySkuStock(Long sku);
+
+    /**
+     * 缓存库存以消耗完毕，清空数据库库存
+     *
+     * @param sku 活动商品
+     */
+    void clearActivitySkuStock(Long sku);
+
+}
