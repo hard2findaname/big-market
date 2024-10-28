@@ -27,12 +27,13 @@ public class ActivityAssembly implements IActivityAssembly, IActivityDispatch{
         activityRepository.queryRaffleActivityByActivityId(activitySkuEntity.getActivityId());
         // 查询活动次数【】
         activityRepository.queryRaffleActivityCountByActivityCountId(activitySkuEntity.getActivityCountId());
-        return false;
+        return true;
     }
 
     private void cacheActivitySKUStockCount(Long sku, Integer stockCount) {
         String cacheKey = Constants.RedisKey.ACTIVITY_SKU_STOCK_COUNT_KEY + sku;
         activityRepository.cacheActivitySKUStockCount(cacheKey, stockCount);
+        log.info("装配完成: redis存储 sku：{},count：{}",cacheKey,stockCount);
     }
 
     @Override

@@ -12,7 +12,7 @@ import org.example.domain.activity.model.entity.SKURechargeEntity;
 
 public interface IRaffleOrder {
 
-    ActivityOrderEntity createActivityOrder(ActivityShopCartEntity activityShopCartEntity);
+
     /**
      * 创建 sku 账户充值订单，给用户增加抽奖次数
      * <p>

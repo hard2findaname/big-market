@@ -190,7 +190,7 @@ public class ActivityRepository implements IActivityRepository {
         if(!lock){
             log.info("加锁失败");
         }
-        return false;
+        return lock;
     }
 
     @Override

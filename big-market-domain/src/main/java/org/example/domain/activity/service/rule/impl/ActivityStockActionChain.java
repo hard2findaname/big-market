@@ -41,8 +41,9 @@ public class ActivityStockActionChain extends AbstractActionChain{
                     .activityId(activityEntity.getActivityId())
                     .build());
             return true;
+        }else{
+            throw new AppException(ResponseCode.ACTIVITY_SKU_STOCK_ERROR.getCode(),ResponseCode.ACTIVITY_SKU_STOCK_ERROR.getInfo());
         }
-        throw new AppException(ResponseCode.ACTIVITY_SKU_STOCK_ERROR.getCode(),ResponseCode.ACTIVITY_SKU_STOCK_ERROR.getInfo());
 
     }
 }
