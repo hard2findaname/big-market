@@ -7,7 +7,7 @@ import org.example.domain.activity.model.valobj.ActivitySKUStockKeyVO;
  * @Date 2024/10/23 23:23
  * @description: 活动sku库存处理接口
  */
-public interface ISKUStock {
+public interface IRaffleActivitySkuStockService {
     /**
      * 获取活动sku库存消耗队列
      *

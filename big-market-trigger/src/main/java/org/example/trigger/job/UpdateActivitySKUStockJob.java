@@ -2,7 +2,7 @@ package org.example.trigger.job;
 
 import lombok.extern.slf4j.Slf4j;
 import org.example.domain.activity.model.valobj.ActivitySKUStockKeyVO;
-import org.example.domain.activity.service.ISKUStock;
+import org.example.domain.activity.service.IRaffleActivitySkuStockService;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
@@ -18,7 +18,7 @@ import javax.annotation.Resource;
 public class UpdateActivitySKUStockJob {
 
     @Resource
-    private ISKUStock stock;
+    private IRaffleActivitySkuStockService stock;
     @Scheduled(cron = "0/10 * * * * ?")
     public void exec(){
         try {

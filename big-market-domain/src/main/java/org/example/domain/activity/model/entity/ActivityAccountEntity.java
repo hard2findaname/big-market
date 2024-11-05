@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * @Author Atticus
- * @date 2024-10-16 22:39 22:39
+ * @date 2024-10-16 22:39
  * @description: 活动账户实体对象
  */
 @Data
