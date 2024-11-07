@@ -23,7 +23,6 @@ public class UpdateAwardCountJob {
     @Scheduled(cron = "0/5 * * * * ?")
     public void exec(){
         try {
-            log.info("定时任务，更新奖品消耗库存【延迟队列获取，降低对数据库的更新频次，不要产生竞争】");
             StrategyAwardStockKeyVO stockKeyVO = raffleStock.takeQueueValue();
             if(null == stockKeyVO)return;
             log.info("定时任务，更新奖品消耗库存 strategyId:{} awardId:{}", stockKeyVO.getStrategyId(), stockKeyVO.getAwardId());

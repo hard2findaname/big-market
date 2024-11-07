@@ -370,9 +370,11 @@ public class ActivityRepository implements IActivityRepository {
                                 .monthCountSurplus(activityAccountMonthEntity.getMonthCountSurplus() - 1)
                                 .build());
                         // 新创建月账户，则更新总账表中月镜像额度
-                        raffleActivityAccountDao.updateActivityAccountMonthSurplusImageQuota(RaffleActivityAccount.builder()
+                        raffleActivityAccountDao.updateActivityAccountMonthSurplusImageQuota(
+                                RaffleActivityAccount.builder()
                                 .userId(userId)
                                 .activityId(activityId)
+
                                 .monthCountSurplus(activityAccountEntity.getMonthCountSurplus())
                                 .build());
                     }

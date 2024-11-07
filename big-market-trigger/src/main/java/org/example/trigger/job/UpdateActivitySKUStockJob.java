@@ -22,7 +22,6 @@ public class UpdateActivitySKUStockJob {
     @Scheduled(cron = "0/10 * * * * ?")
     public void exec(){
         try {
-            log.info("定时任务，更新活动sku库存【延迟队列获取，降低对数据库的更新频次，不要产生竞争】");
             ActivitySKUStockKeyVO activitySKUStockKeyVO = stock.takeQueueValue();
             if(null == activitySKUStockKeyVO)return;
             log.info("定时任务，更新活动sku库存 sku:{} activityId:{}", activitySKUStockKeyVO.getSku(), activitySKUStockKeyVO.getActivityId());
