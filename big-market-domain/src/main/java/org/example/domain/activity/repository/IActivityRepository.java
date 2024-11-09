@@ -6,6 +6,7 @@ import org.example.domain.activity.model.entity.*;
 import org.example.domain.activity.model.valobj.ActivitySKUStockKeyVO;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author atticus
@@ -44,4 +45,6 @@ public interface IActivityRepository {
     UserRaffleOrderEntity queryNoUsedRaffleOrder(PartakeRaffleActivityEntity partakeRaffleActivityEntity);
 
     void saveCreatePartakeOrderAggregate(CreatePartakeOrderAggregate createPartakeOrderAggregate);
+
+    List<ActivitySkuEntity> queryActivitySkuListByActivityId(Long activityId);
 }

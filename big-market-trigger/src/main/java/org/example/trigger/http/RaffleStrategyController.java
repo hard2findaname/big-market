@@ -8,10 +8,10 @@ import org.example.domain.strategy.model.entity.StrategyAwardEntity;
 import org.example.domain.strategy.service.IRaffleAward;
 import org.example.domain.strategy.service.IRaffleStrategy;
 import org.example.domain.strategy.service.assembly.IStrategyAssembly;
-import org.example.trigger.api.IRaffleService;
+import org.example.trigger.api.IRaffleStrategyService;
 import org.example.trigger.api.dto.RaffleAwardListRequestDTO;
 import org.example.trigger.api.dto.RaffleAwardListResponseDTO;
-import org.example.trigger.api.dto.RaffleRequestDTO;
+import org.example.trigger.api.dto.RaffleStrategyRequestDTO;
 import org.example.trigger.api.dto.RaffleResponseDTO;
 import org.example.types.enums.ResponseCode;
 import org.example.types.exception.AppException;
@@ -30,8 +30,8 @@ import java.util.List;
 @Slf4j
 @RestController()
 @CrossOrigin("${app.config.cross-origin}")
-@RequestMapping("/api/${app.config.api-version}/raffle/")
-public class IRaffleController implements IRaffleService {
+@RequestMapping("/api/${app.config.api-version}/raffle/strategy")
+public class RaffleStrategyController implements IRaffleStrategyService {
 
     @Resource
     private IStrategyAssembly strategyAssembly;
@@ -119,7 +119,7 @@ public class IRaffleController implements IRaffleService {
      **/
     @RequestMapping(value = "perform_raffle", method = RequestMethod.POST)
     @Override
-    public Response<RaffleResponseDTO> performRaffle(@RequestBody RaffleRequestDTO requestDTO) {
+    public Response<RaffleResponseDTO> performRaffle(@RequestBody RaffleStrategyRequestDTO requestDTO) {
         try{
             log.info("随机抽奖开始 strategyId: {}", requestDTO.getStrategyId());
             RaffleAwardEntity raffleAwardEntity = raffleStrategy.performRaffle(RaffleFactorEntity.builder()

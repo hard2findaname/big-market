@@ -7,4 +7,6 @@ package org.example.domain.activity.service.Assembly;
  */
 public interface IActivityAssembly {
     boolean assembleActivitySKU(Long sku);
+
+    boolean assembleActivitySKUByActivityId(Long activityId);
 }

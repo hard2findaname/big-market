@@ -2,7 +2,7 @@ package org.example.trigger.api;
 
 import org.example.trigger.api.dto.RaffleAwardListRequestDTO;
 import org.example.trigger.api.dto.RaffleAwardListResponseDTO;
-import org.example.trigger.api.dto.RaffleRequestDTO;
+import org.example.trigger.api.dto.RaffleStrategyRequestDTO;
 import org.example.trigger.api.dto.RaffleResponseDTO;
 import org.example.types.model.Response;
 
@@ -13,7 +13,7 @@ import java.util.List;
  * @Date 2024/10/09 19:52
  * @description:
  */
-public interface IRaffleService {
+public interface IRaffleStrategyService {
     /**
      * @description: 奖品策略装配接口
      * @param: strategyId           策略ID
@@ -31,5 +31,5 @@ public interface IRaffleService {
      * @param: requestDTO
      * @return: Response<RaffleResponseDTO>
      **/
-    Response<RaffleResponseDTO> performRaffle(RaffleRequestDTO requestDTO);
+    Response<RaffleResponseDTO> performRaffle(RaffleStrategyRequestDTO requestDTO);
 }

@@ -10,6 +10,10 @@ import org.example.domain.activity.model.valobj.UserRaffleOrderStateVO;
  * @description:
  */
 public interface IRaffleActivityPartakeService {
+
+    UserRaffleOrderEntity createOrder(String userId, Long activityId);
+
+
     /**
      *
      * @param: partakeRaffleActivityEntity

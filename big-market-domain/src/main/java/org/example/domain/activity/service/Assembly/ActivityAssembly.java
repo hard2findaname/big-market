@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author atticus
@@ -27,6 +28,19 @@ public class ActivityAssembly implements IActivityAssembly, IActivityDispatch{
         activityRepository.queryRaffleActivityByActivityId(activitySkuEntity.getActivityId());
         // 查询活动次数【】
         activityRepository.queryRaffleActivityCountByActivityCountId(activitySkuEntity.getActivityCountId());
+        return true;
+    }
+
+    @Override
+    public boolean assembleActivitySKUByActivityId(Long activityId) {
+        List<ActivitySkuEntity> activitySkuEntityList = activityRepository.queryActivitySkuListByActivityId(activityId);
+        for(ActivitySkuEntity activitySkuEntity : activitySkuEntityList){
+            cacheActivitySKUStockCount(activitySkuEntity.getSku(), activitySkuEntity.getStockCount());
+            // 查询活动【存到缓存】
+            activityRepository.queryRaffleActivityCountByActivityCountId(activitySkuEntity.getActivityCountId());
+
+        }
+        activityRepository.queryRaffleActivityByActivityId(activityId);
         return true;
     }
 

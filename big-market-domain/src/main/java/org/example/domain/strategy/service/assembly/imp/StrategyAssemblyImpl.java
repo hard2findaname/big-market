@@ -28,6 +28,13 @@ import java.util.*;
 public class StrategyAssemblyImpl implements IStrategyAssembly, IStrategyDispatch {
     @Resource
     private IStrategyRepository strategyRepository;
+
+    @Override
+    public boolean assembleLotteryStrategyByActivityId(Long activityId) {
+        Long strategyId =  strategyRepository.queryStrategyIdByActivityId(activityId);
+        return assembleLotteryStrategy(strategyId);
+    }
+
     @Override
     public boolean assembleLotteryStrategy(Long strategyId) {
         //1、查询策略配置

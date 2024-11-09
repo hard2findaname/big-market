@@ -1,4 +1,4 @@
-package org.example.domain.strategy.model.entity;
+package org.example.trigger.api.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -7,22 +7,19 @@ import lombok.NoArgsConstructor;
 
 /**
  * @Author atticus
- * @Date 2024/09/29 23:52
+ * @Date 2024/11/08 13:52
  * @description:
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RaffleAwardEntity {
-    /** 奖品ID */
+public class ActivityDrawResponseDTO {
+    // 奖品ID
     private Integer awardId;
-    /** 奖品配置信息 */
-    private String awardConfig;
-    /** 奖品标题（名称） */
+    // 奖品标题
     private String awardTitle;
-
-    private Integer sort;
-
+    // 排序编号【策略奖品配置的奖品顺序编号】
+    private Integer awardIndex;
 
 }
