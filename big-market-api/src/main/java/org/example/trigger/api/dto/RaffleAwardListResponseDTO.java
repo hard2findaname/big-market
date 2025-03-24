@@ -23,5 +23,10 @@ public class RaffleAwardListResponseDTO {
     private String awardSubtitle;
     // 排序编号
     private Integer sort;
-
+    // 解锁奖品抽奖次数计数- 抽奖N次解锁，未配置为空
+    private Integer awardUnlockCount;
+    // 奖品是否解锁 - true 已解锁
+    private boolean isAwardLocked;
+    // 待解锁次数 - 为 规定N次 - 用户已抽奖次数
+    private Integer unlockRemaining;
 }

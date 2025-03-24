@@ -60,7 +60,7 @@ public class StrategyRepository implements IStrategyRepository {
         String cacheKey = Constants.RedisKey.STRATEGY_AWARD_LIST_KEY + strategyId;
         List<StrategyAwardEntity> strategyAwardEntities =  redisService.getValue(cacheKey);
         if(null != strategyAwardEntities&&!strategyAwardEntities.isEmpty())return strategyAwardEntities;
-        // 从库中获取数据
+        // 从数据库中获取数据
         List<StrategyAward> strategyAwards = strategyAwardDao.queryStrategyAwardListByStrategyId(strategyId);
         strategyAwardEntities = new ArrayList<>(strategyAwards.size());
         for (StrategyAward strategyAward : strategyAwards) {
@@ -73,9 +73,11 @@ public class StrategyRepository implements IStrategyRepository {
                     .awardCountSurplus(strategyAward.getAwardCountSurplus())
                     .awardRate(strategyAward.getAwardRate())
                     .sort(strategyAward.getSort())
+                    .ruleModels(strategyAward.getRuleModels())
                     .build();
             strategyAwardEntities.add(strategyAwardEntity);
         }
+        //从数据库中查询后，写入redis缓存当中
         redisService.setValue(cacheKey, strategyAwardEntities);
         return strategyAwardEntities;
 
@@ -319,6 +321,19 @@ public class StrategyRepository implements IStrategyRepository {
         if(null == raffleActivityAccountDay) return 0;
         return raffleActivityAccountDay.getDayCount() - raffleActivityAccountDay.getDayCountSurplus();
 
+    }
+
+    @Override
+    public Map<String, Integer> queryAwardRuleLockCount(String[] treeIds) {
+        if(null == treeIds || treeIds.length == 0) return new HashMap<>();
+        List<RuleTreeNode> ruleTreeNodeList = ruleTreeNodeDao.queryRuleLock(treeIds);
+        Map<String, Integer> resultMap = new HashMap<>();
+        for(RuleTreeNode ruleTreeNode : ruleTreeNodeList){
+            String treeId = ruleTreeNode.getTreeId();
+            Integer ruleValue = Integer.valueOf(ruleTreeNode.getRuleValue());
+            resultMap.put(treeId, ruleValue);
+        }
+        return resultMap;
     }
 
 }

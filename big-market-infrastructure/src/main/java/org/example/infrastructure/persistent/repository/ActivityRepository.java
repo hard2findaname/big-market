@@ -449,4 +449,14 @@ public class ActivityRepository implements IActivityRepository {
         }
         return activitySkuEntityList;
     }
+
+    @Override
+    public Integer queryAccountDailyLottery(Long activityId, String userId) {
+        RaffleActivityAccountDay activityAccountDay = new RaffleActivityAccountDay();
+        activityAccountDay.setActivityId(activityId);
+        activityAccountDay.setUserId(userId);
+        activityAccountDay.setDay(activityAccountDay.getDay());
+        Integer dailyLottery = raffleActivityAccountDayDao.queryAccountDailyLottery(activityAccountDay);
+        return null == dailyLottery ? 0 : dailyLottery;
+    }
 }
