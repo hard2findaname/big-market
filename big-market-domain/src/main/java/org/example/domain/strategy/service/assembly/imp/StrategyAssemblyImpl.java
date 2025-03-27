@@ -43,7 +43,9 @@ public class StrategyAssemblyImpl implements IStrategyAssembly, IStrategyDispatc
         //2、缓存奖品设【用于扣减库存】
         for(StrategyAwardEntity strategyAward: strategyAwardEntities){
             Integer awardId = strategyAward.getAwardId();
-            Integer awardCount = strategyAward.getAwardCount();
+            //勘误，此处应为设置库存余量
+            //Integer awardCount = strategyAward.getAwardCount();
+            Integer awardCount = strategyAward.getAwardCountSurplus();
             cacheStrategyAwardCount(strategyId, awardId, awardCount);
         }
 
@@ -155,7 +157,7 @@ public class StrategyAssemblyImpl implements IStrategyAssembly, IStrategyDispatc
     }
 
     @Override
-    public Boolean subAwardStock(Long strategyId, Integer awardId) {
+    public Boolean subAwardStock(Long strategyId, Integer awardId, Date endDateTime) {
         String cacheKey = Constants.RedisKey.STRATEGY_AWARD_COUNT_KEY + strategyId + Constants.UNDERLINE + awardId;
 
         return strategyRepository.subAwardStock(cacheKey);

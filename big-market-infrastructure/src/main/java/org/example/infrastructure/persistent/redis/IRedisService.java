@@ -253,5 +253,7 @@ public interface IRedisService {
 
     Boolean setNx(String lockKey);
 
+    Boolean setNx(String key, long expired);
+
     boolean setAtomicLong(String lockKey, long expireTimeMillis);
 }

@@ -5,10 +5,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 /**
  * @Author atticus
  * @Date 2024/09/29 23:45
- * @description: 奖品实体
+ * @description: 抽奖因子
  */
 @Data
 @Builder
@@ -21,5 +23,7 @@ public class RaffleFactorEntity {
     private Long strategyId;
     /** 奖品ID */
     private Integer awardId;
+    /** 结束时间 */
+    private Date endDateTime;
 
 }
