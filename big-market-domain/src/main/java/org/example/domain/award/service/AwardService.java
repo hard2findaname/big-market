@@ -1,4 +1,4 @@
-package org.example.domain.award;
+package org.example.domain.award.service;
 
 import org.example.domain.award.event.SendAwardMessageEvent;
 import org.example.domain.award.model.aggregate.UserAwardRecordAggregate;
@@ -27,12 +27,12 @@ public class AwardService extends AbstractAwardService {
     @Override
     public void saveUserAwardRecord(UserAwardRecordEntity userAwardRecordEntity) {
         //构建消息对象
-        SendAwardMessageEvent.SendAwardMessage sendAwardMessage = new SendAwardMessageEvent.SendAwardMessage();
+        SendAwardMessageEvent.AwardMessage sendAwardMessage = new SendAwardMessageEvent.AwardMessage();
         sendAwardMessage.setUserId(userAwardRecordEntity.getUserId());
         sendAwardMessage.setActivityId(userAwardRecordEntity.getActivityId());
         sendAwardMessage.setAwardTitle(userAwardRecordEntity.getAwardTitle());
 
-        BaseEvent.EventMessage<SendAwardMessageEvent.SendAwardMessage> sendAwardMessageEventMessage = sendAwardMessageEvent.buildEventMessage(sendAwardMessage);
+        BaseEvent.EventMessage<SendAwardMessageEvent.AwardMessage> sendAwardMessageEventMessage = sendAwardMessageEvent.buildEventMessage(sendAwardMessage);
 
         TaskEntity taskEntity = new TaskEntity();
         taskEntity.setUserId(userAwardRecordEntity.getUserId());

@@ -21,4 +21,6 @@ public interface IRaffleActivityAccountQuotaService {
      * @return: void
      **/
     String createOrder(SKURechargeEntity skuRechargeEntity);
+
+    Integer queryAccountDailyLottery(Long activityId, String userId);
 }

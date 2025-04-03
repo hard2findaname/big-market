@@ -170,6 +170,11 @@ public class RedissonService implements IRedisService{
     public Boolean setNx(String lockKey) {
         return redissonClient.getBucket(lockKey).setIfAbsent("lock");
     }
+    @Override
+    public Boolean setNx(String lockKey, long expired) {
+        return redissonClient.getBucket(lockKey).setIfAbsent("lock", Duration.ofMillis(expired));
+    }
+
 
     @Override
     public boolean setAtomicLong(String lockKey, long expireTimeMillis) {

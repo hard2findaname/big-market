@@ -1,6 +1,7 @@
 package org.example.infrastructure.persistent.repository;
 
 import cn.bugstack.middleware.db.router.strategy.IDBRouterStrategy;
+import com.esotericsoftware.minlog.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.example.domain.activity.event.ActivitySkuStockZeroMessageEvent;
 import org.example.domain.activity.model.aggregate.CreatePartakeOrderAggregate;
@@ -448,5 +449,16 @@ public class ActivityRepository implements IActivityRepository {
             activitySkuEntityList.add(activitySkuEntity);
         }
         return activitySkuEntityList;
+    }
+
+    @Override
+    public Integer queryAccountDailyLottery(Long activityId, String userId) {
+        RaffleActivityAccountDay activityAccountDay = new RaffleActivityAccountDay();
+        activityAccountDay.setActivityId(activityId);
+        activityAccountDay.setUserId(userId);
+        activityAccountDay.setDay(activityAccountDay.currentDay());
+        Integer dailyLottery = raffleActivityAccountDayDao.queryAccountDailyLottery(activityAccountDay);
+//        log.info("用户当日抽奖次数: {}", dailyLottery);
+        return null == dailyLottery ? 0 : dailyLottery;
     }
 }

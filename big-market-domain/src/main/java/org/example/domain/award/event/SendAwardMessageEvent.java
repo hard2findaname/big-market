@@ -17,14 +17,14 @@ import java.util.Date;
  * @description:
  */
 @Service
-public class SendAwardMessageEvent extends BaseEvent<SendAwardMessageEvent.SendAwardMessage> {
+public class SendAwardMessageEvent extends BaseEvent<SendAwardMessageEvent.AwardMessage> {
 
     @Value("${spring.rabbitmq.topic.send_award}")
     private String topic;
 
     @Override
-    public EventMessage<SendAwardMessage> buildEventMessage(SendAwardMessage data) {
-        return EventMessage.<SendAwardMessage>builder()
+    public EventMessage<AwardMessage> buildEventMessage(AwardMessage data) {
+        return EventMessage.<AwardMessage>builder()
                 .id(RandomStringUtils.randomNumeric(11))
                 .timeStamp(new Date())
                 .data(data)
@@ -40,7 +40,7 @@ public class SendAwardMessageEvent extends BaseEvent<SendAwardMessageEvent.SendA
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class SendAwardMessage{
+    public static class AwardMessage{
         /** 用户ID */
         private String userId;
         /** 活动ID */

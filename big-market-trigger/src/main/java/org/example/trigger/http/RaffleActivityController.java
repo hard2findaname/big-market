@@ -5,7 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.example.domain.activity.model.entity.UserRaffleOrderEntity;
 import org.example.domain.activity.service.Assembly.IActivityAssembly;
 import org.example.domain.activity.service.IRaffleActivityPartakeService;
-import org.example.domain.award.IAwardService;
+import org.example.domain.award.service.IAwardService;
 import org.example.domain.award.model.entity.UserAwardRecordEntity;
 import org.example.domain.award.model.valobj.AwardStatusVO;
 import org.example.domain.strategy.model.entity.RaffleAwardEntity;
@@ -121,6 +121,7 @@ public class RaffleActivityController implements IRaffleActivityService {
             RaffleAwardEntity raffleAwardEntity = raffleStrategy.performRaffle(RaffleFactorEntity.builder()
                     .userId(orderEntity.getUserId())
                     .strategyId(orderEntity.getStrategyId())
+                    .endDateTime(orderEntity.getEndDateTime())
                     .build());
             // 存放结果 - 写入中奖记录
             UserAwardRecordEntity userAwardRecordEntity = UserAwardRecordEntity.builder()

@@ -11,7 +11,7 @@ import java.util.Date;
 /**
  * @Author atticus
  * @Date 2024/10/30 23:00
- * @description: .
+ * @description: 用户抽奖订单
  */
 @Data
 @Builder
@@ -32,4 +32,6 @@ public class UserRaffleOrderEntity {
     private Date orderTime;
     /** 创建时间 */
     private UserRaffleOrderStateVO orderState;
+    /** 结束时间*/
+    private Date endDateTime;
 }

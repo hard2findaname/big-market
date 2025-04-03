@@ -1,4 +1,4 @@
-package org.example.domain.award;
+package org.example.domain.award.service;
 
 /**
  * @Author atticus

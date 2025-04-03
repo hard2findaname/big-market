@@ -18,6 +18,6 @@ public interface IRaffleActivityAccountDayDao {
 
     void insertActivityAccountDay(RaffleActivityAccountDay raffleActivityAccountDay);
 
-
-
+    @DBRouter
+    Integer queryAccountDailyLottery(RaffleActivityAccountDay activityAccountDay);
 }

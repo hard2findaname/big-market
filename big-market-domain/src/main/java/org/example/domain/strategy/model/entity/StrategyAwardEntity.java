@@ -33,5 +33,6 @@ public class StrategyAwardEntity {
     private BigDecimal awardRate;
     /** 排序 */
     private Integer sort;
-
+    /** 规则模型， */
+    private String ruleModels;
 }

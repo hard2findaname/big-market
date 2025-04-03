@@ -10,6 +10,18 @@ import java.util.List;
  * @description: 抽奖奖品查询
  */
 public interface IRaffleAward {
-
+    /**
+     * 根据策略Id查询抽奖策略奖品列表
+     *
+     * @param: strategyId
+     * @return: List<StrategyAwardEntity>
+     **/
     List<StrategyAwardEntity> queryRaffleStrategyAwardList(Long strategyId);
+    /**
+     * 根据活动Id查询抽奖策略奖品列表
+     *
+     * @param: activityId 活动ID
+     * @return: List<StrategyAwardEntity>
+     **/
+    List<StrategyAwardEntity> queryRaffleStrategyAwardListByActivityId(Long activityId);
 }
