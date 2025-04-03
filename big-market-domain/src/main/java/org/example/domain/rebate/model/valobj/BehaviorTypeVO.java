@@ -1,0 +1,22 @@
+package org.example.domain.rebate.model.valobj;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+/**
+ * @Author atticus
+ * @Date 2025/04/02 21:23
+ * @description: 行为类型枚举值
+ */
+@Getter
+@AllArgsConstructor
+public enum BehaviorTypeVO {
+
+    SIGN("sign", "签到"),
+    OPENAI_PAY("openai_pay", "openai 外部支付完成"),
+    ;
+
+
+    private final String code;
+    private final String info;
+}

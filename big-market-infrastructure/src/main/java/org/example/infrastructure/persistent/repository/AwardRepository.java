@@ -102,10 +102,12 @@ public class AwardRepository implements IAwardRepository {
             dbRouter.clear();
         }
         try {
+                // 发送消息【在事务外执行，如果失败还有任务补偿】
                 eventPublisher.publish(task.getTopic(),task.getMessage());
+                // 更新数据库记录，task 任务表
                 taskDao.updateTaskMessageStatus_Completed(task);
             }catch (Exception e){
-            log.error("");
+            log.error("写入中奖记录，发送MQ消息失败 userId: {} topic: {}", userId, task.getTopic());
             taskDao.updateTaskMessageStatus_Failed(task);
         }
     }
