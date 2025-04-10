@@ -4,6 +4,8 @@ import org.example.trigger.api.dto.ActivityDrawRequestDTO;
 import org.example.trigger.api.dto.ActivityDrawResponseDTO;
 import org.example.types.model.Response;
 
+import javax.annotation.Resource;
+
 /**
  * @Author atticus
  * @Date 2024/11/08 13:51
@@ -22,4 +24,10 @@ public interface IRaffleActivityService {
      * @return: 返回中奖结果
      **/
     Response<ActivityDrawResponseDTO> draw(ActivityDrawRequestDTO request);
+    /**
+     * 每日签到返利接口
+     * @param: userId               用户ID
+     * @return: Response<Boolean>   签到获得
+     **/
+    Response<Boolean> dailySignRebate(String userId);
 }

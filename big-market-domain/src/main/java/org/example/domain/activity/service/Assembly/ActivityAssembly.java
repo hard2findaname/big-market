@@ -35,7 +35,7 @@ public class ActivityAssembly implements IActivityAssembly, IActivityDispatch{
     public boolean assembleActivitySKUByActivityId(Long activityId) {
         List<ActivitySkuEntity> activitySkuEntityList = activityRepository.queryActivitySkuListByActivityId(activityId);
         for(ActivitySkuEntity activitySkuEntity : activitySkuEntityList){
-            cacheActivitySKUStockCount(activitySkuEntity.getSku(), activitySkuEntity.getStockCount());
+            cacheActivitySKUStockCount(activitySkuEntity.getSku(), activitySkuEntity.getStockCountSurplus());
             // 查询活动【存到缓存】
             activityRepository.queryRaffleActivityCountByActivityCountId(activitySkuEntity.getActivityCountId());
 
