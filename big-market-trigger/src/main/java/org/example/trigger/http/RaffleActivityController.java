@@ -3,13 +3,16 @@ package org.example.trigger.http;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.example.domain.activity.model.entity.ActivityAccountEntity;
 import org.example.domain.activity.model.entity.UserRaffleOrderEntity;
 import org.example.domain.activity.service.Assembly.IActivityAssembly;
+import org.example.domain.activity.service.IRaffleActivityAccountQuotaService;
 import org.example.domain.activity.service.IRaffleActivityPartakeService;
 import org.example.domain.award.service.IAwardService;
 import org.example.domain.award.model.entity.UserAwardRecordEntity;
 import org.example.domain.award.model.valobj.AwardStatusVO;
 import org.example.domain.rebate.model.entity.BehaviorEntity;
+import org.example.domain.rebate.model.entity.BehaviorRebateOrderEntity;
 import org.example.domain.rebate.model.valobj.BehaviorTypeVO;
 import org.example.domain.rebate.service.IBehaviorRebateService;
 import org.example.domain.strategy.model.entity.RaffleAwardEntity;
@@ -19,6 +22,8 @@ import org.example.domain.strategy.service.assembly.IStrategyAssembly;
 import org.example.trigger.api.IRaffleActivityService;
 import org.example.trigger.api.dto.ActivityDrawRequestDTO;
 import org.example.trigger.api.dto.ActivityDrawResponseDTO;
+import org.example.trigger.api.dto.UserActivityAccountRequestDTO;
+import org.example.trigger.api.dto.UserActivityAccountResponseDTO;
 import org.example.types.enums.ResponseCode;
 import org.example.types.exception.AppException;
 import org.example.types.model.Response;
@@ -42,10 +47,11 @@ public class RaffleActivityController implements IRaffleActivityService {
 
 
 
-    private final SimpleDateFormat dateFormatDay = new SimpleDateFormat("yyyyMMdd");
+    private final static SimpleDateFormat dateFormatDay = new SimpleDateFormat("yyyyMMdd");
     @Resource
     private IRaffleActivityPartakeService raffleActivityPartakeService;
-
+    @Resource
+    private IRaffleActivityAccountQuotaService raffleActivityAccountQuotaService;
     @Resource
     private IRaffleStrategy raffleStrategy;
 
@@ -191,7 +197,7 @@ public class RaffleActivityController implements IRaffleActivityService {
 
     @RequestMapping(value = "daily_sign_rebate", method = RequestMethod.POST)
     @Override
-    public Response<Boolean> dailySignRebate(String userId) {
+    public Response<Boolean> dailySignRebate(@RequestParam String userId) {
         try{
             log.info("每日签到返利开始 userId: {}",userId);
             BehaviorEntity behaviorEntity = new BehaviorEntity();
@@ -219,6 +225,63 @@ public class RaffleActivityController implements IRaffleActivityService {
                     .code(ResponseCode.UN_ERROR.getCode())
                     .info(ResponseCode.UN_ERROR.getInfo())
                     .data(false)
+                    .build();
+        }
+
+    }
+
+    @Override
+    @RequestMapping(value = "is_daily_sign_rebated", method = RequestMethod.POST)
+    public Response<Boolean> isDailySignRebated(@RequestParam String userId) {
+        try{
+            log.info("查询用户是否完成签到开始 userId: {}", userId);
+            String outBusinessNo = dateFormatDay.format(new Date());
+            List<BehaviorRebateOrderEntity> behaviorRebateOrderEntityList = behaviorRebateService.queryOrderByBusinessNo(userId, outBusinessNo);
+            log.info("查询用户是否完成签到完成 userId: {} order.size: {}", userId, behaviorRebateOrderEntityList.size());
+            return Response.<Boolean>builder()
+                    .code(ResponseCode.SUCCESS.getCode())
+                    .info(ResponseCode.SUCCESS.getInfo())
+                    .data(!behaviorRebateOrderEntityList.isEmpty())
+                    .build();
+        }catch (Exception e){
+            log.error("查询用户是否完成签到失败 userId: {}", userId , e);
+            return Response.<Boolean>builder()
+                    .code(ResponseCode.UN_ERROR.getCode())
+                    .info(ResponseCode.UN_ERROR.getInfo())
+                    .data(false)
+                    .build();
+        }
+
+    }
+
+    @Override
+    @RequestMapping(value = "query_user_activity_account", method = RequestMethod.POST)
+    public Response<UserActivityAccountResponseDTO> queryUserActivityAccount(@RequestBody UserActivityAccountRequestDTO request) {
+        try {
+            log.info("查询用户活动账户开始 userId:{} activityId:{}", request.getUserId(), request.getActivityId());
+            // 1. 参数校验
+            if(StringUtils.isBlank(request.getUserId()) || null == request.getActivityId()){
+                throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
+            }
+            ActivityAccountEntity activityAccountEntity = raffleActivityAccountQuotaService.queryActivityAccountEntity(request.getActivityId(), request.getUserId());
+            UserActivityAccountResponseDTO userActivityAccountResponseDTO = new UserActivityAccountResponseDTO();
+            userActivityAccountResponseDTO.setTotalCount(activityAccountEntity.getTotalCount());
+            userActivityAccountResponseDTO.setTotalCountSurplus(activityAccountEntity.getTotalCountSurplus());
+            userActivityAccountResponseDTO.setDayCount(activityAccountEntity.getDayCount());
+            userActivityAccountResponseDTO.setDayCountSurplus(activityAccountEntity.getDayCountSurplus());
+            userActivityAccountResponseDTO.setMonthCount(activityAccountEntity.getMonthCount());
+            userActivityAccountResponseDTO.setMonthCountSurplus(activityAccountEntity.getMonthCountSurplus());
+            log.info("查询用户活动账户完成 userId:{} activityId:{}", request.getUserId(), request.getActivityId());
+            return Response.<UserActivityAccountResponseDTO>builder()
+                    .code(ResponseCode.SUCCESS.getCode())
+                    .info(ResponseCode.SUCCESS.getInfo())
+                    .data(userActivityAccountResponseDTO)
+                    .build();
+        }catch (Exception e){
+            log.error("查询用户活动账户完成 userId: {}", request.getUserId() , e);
+            return Response.<UserActivityAccountResponseDTO>builder()
+                    .code(ResponseCode.UN_ERROR.getCode())
+                    .info(ResponseCode.UN_ERROR.getInfo())
                     .build();
         }
 

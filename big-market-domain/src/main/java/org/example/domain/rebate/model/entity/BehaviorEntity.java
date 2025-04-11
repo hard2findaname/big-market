@@ -20,6 +20,6 @@ public class BehaviorEntity {
     private String userId;
 
     private BehaviorTypeVO behaviorTypeVO;
-
+    /** 业务防重ID */
     private String outBusinessNo;
 }

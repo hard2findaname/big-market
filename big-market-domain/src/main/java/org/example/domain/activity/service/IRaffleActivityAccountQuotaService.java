@@ -1,5 +1,6 @@
 package org.example.domain.activity.service;
 
+import org.example.domain.activity.model.entity.ActivityAccountEntity;
 import org.example.domain.activity.model.entity.SKURechargeEntity;
 
 /**
@@ -21,6 +22,18 @@ public interface IRaffleActivityAccountQuotaService {
      * @return: void
      **/
     String createOrder(SKURechargeEntity skuRechargeEntity);
-
+    /**
+     * 查询活动账户 - 日，参与次数
+     *
+     *
+     *
+     * @param: activityId   活动ID
+     * @param: userId       用户ID
+     * @return: Integer     参与次数
+     **/
     Integer queryAccountDailyLottery(Long activityId, String userId);
+
+    ActivityAccountEntity queryActivityAccountEntity(Long activityId, String userId);
+
+    Integer queryAccountTotalLottery(Long activityId, String userId);
 }

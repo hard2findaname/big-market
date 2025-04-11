@@ -86,4 +86,16 @@ public class RaffleActivityAccountQuotaService extends AbstractRaffleActivityAcc
     public Integer queryAccountDailyLottery(Long activityId, String userId) {
         return activityRepository.queryAccountDailyLottery(activityId, userId);
     }
+
+    @Override
+    public ActivityAccountEntity queryActivityAccountEntity(Long activityId, String userId) {
+
+        return activityRepository.queryActivityAccountEntity(activityId, userId);
+    }
+
+    @Override
+    public Integer queryAccountTotalLottery(Long activityId, String userId) {
+
+        return activityRepository.queryAccountTotalLottery(activityId, userId);
+    }
 }

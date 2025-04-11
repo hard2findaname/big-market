@@ -7,7 +7,7 @@ import org.example.infrastructure.persistent.po.RaffleActivityAccountDay;
 /**
  * @Author atticus
  * @Date 2024/10/30 17:42
- * @description:
+ * @description: 用户抽奖活动账户日记录表查询
  */
 @Mapper
 public interface IRaffleActivityAccountDayDao {

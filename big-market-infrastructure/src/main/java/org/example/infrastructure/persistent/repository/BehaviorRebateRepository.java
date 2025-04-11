@@ -84,6 +84,7 @@ public class BehaviorRebateRepository implements IBehaviorRebateRepository {
                        userBehaviorRebateOrder.setRebateType(behaviorRebateOrderEntity.getRebateType());
                        userBehaviorRebateOrder.setRebateConfig(behaviorRebateOrderEntity.getRebateConfig());
                        userBehaviorRebateOrder.setRebateDesc(behaviorRebateOrderEntity.getRebateDesc());
+                       userBehaviorRebateOrder.setOutBusinessNo(behaviorRebateOrderEntity.getOutBusinessNo());
                        userBehaviorRebateOrder.setBizId(behaviorRebateOrderEntity.getBizId());
                        userBehaviorRebateOrderDao.insert(userBehaviorRebateOrder);
 
@@ -126,5 +127,29 @@ public class BehaviorRebateRepository implements IBehaviorRebateRepository {
                 taskDao.updateTaskMessageStatus_Failed(task);
             }
         }
+    }
+
+    @Override
+    public List<BehaviorRebateOrderEntity> queryOrderByBusinessNo(String userId, String outBusinessNo) {
+        // 1. 构建请求对象
+        UserBehaviorRebateOrder userBehaviorRebateOrderReq = new UserBehaviorRebateOrder();
+        userBehaviorRebateOrderReq.setUserId(userId);
+        userBehaviorRebateOrderReq.setOutBusinessNo(outBusinessNo);
+        // 2. 查询结果
+        List<UserBehaviorRebateOrder> userBehaviorRebateOrderList = userBehaviorRebateOrderDao.queryOrderByBusinessNo(userBehaviorRebateOrderReq);
+        List<BehaviorRebateOrderEntity> behaviorRebateOrderEntityList = new ArrayList<>(userBehaviorRebateOrderList.size());
+        for(UserBehaviorRebateOrder order : userBehaviorRebateOrderList){
+            BehaviorRebateOrderEntity.builder()
+            .orderId(order.getOrderId())
+            .userId(order.getUserId())
+            .behaviorType(order.getBehaviorType())
+            .rebateConfig(order.getRebateConfig())
+            .rebateType(order.getRebateType())
+            .rebateDesc(order.getRebateDesc())
+            .outBusinessNo(order.getOutBusinessNo())
+            .bizId(order.getBizId())
+            .build();
+        }
+        return behaviorRebateOrderEntityList;
     }
 }
