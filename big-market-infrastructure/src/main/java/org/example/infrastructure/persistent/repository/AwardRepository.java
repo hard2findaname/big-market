@@ -5,16 +5,18 @@ import cn.bugstack.middleware.db.router.strategy.IDBRouterStrategy;
 import com.alibaba.fastjson2.JSON;
 import jdk.nashorn.internal.runtime.ECMAException;
 import lombok.extern.slf4j.Slf4j;
+import org.example.domain.award.model.aggregate.DispatchAwardsAggregate;
 import org.example.domain.award.model.aggregate.UserAwardRecordAggregate;
 import org.example.domain.award.model.entity.TaskEntity;
 import org.example.domain.award.model.entity.UserAwardRecordEntity;
+import org.example.domain.award.model.entity.UserCreditAwardEntity;
+import org.example.domain.award.model.valobj.AccountStateVO;
 import org.example.domain.award.repository.IAwardRepository;
 import org.example.infrastructure.event.EventPublisher;
-import org.example.infrastructure.persistent.dao.ITaskDao;
-import org.example.infrastructure.persistent.dao.IUserAwardRecordDao;
-import org.example.infrastructure.persistent.dao.IUserRaffleOrderDao;
+import org.example.infrastructure.persistent.dao.*;
 import org.example.infrastructure.persistent.po.Task;
 import org.example.infrastructure.persistent.po.UserAwardRecord;
+import org.example.infrastructure.persistent.po.UserCreditAccount;
 import org.example.infrastructure.persistent.po.UserRaffleOrder;
 import org.example.types.enums.ResponseCode;
 import org.example.types.exception.AppException;
@@ -34,6 +36,11 @@ import javax.annotation.Resource;
 public class AwardRepository implements IAwardRepository {
     @Resource
     private ITaskDao taskDao;
+    @Resource
+    private IAwardDao awardDao;
+
+    @Resource
+    private IUserCreditAccountDao userCreditAccountDao;
     @Resource
     private IDBRouterStrategy dbRouter;
     @Resource
@@ -102,6 +109,7 @@ public class AwardRepository implements IAwardRepository {
             dbRouter.clear();
         }
         try {
+                log.info("写入中奖记录，发送MQ消息 userId: {} topic: {}", userId, task.getTopic());
                 // 发送消息【在事务外执行，如果失败还有任务补偿】
                 eventPublisher.publish(task.getTopic(),task.getMessage());
                 // 更新数据库记录，task 任务表
@@ -110,5 +118,69 @@ public class AwardRepository implements IAwardRepository {
             log.error("写入中奖记录，发送MQ消息失败 userId: {} topic: {}", userId, task.getTopic());
             taskDao.updateTaskMessageStatus_Failed(task);
         }
+    }
+
+    @Override
+    public String queryAwardConfig(Integer awardId) {
+        return awardDao.queryAwardConfig(awardId);
+    }
+
+    @Override
+    public void saveDispatchAwardsAggregate(DispatchAwardsAggregate dispatchAwardsAggregate) {
+        String userId = dispatchAwardsAggregate.getUserId();
+        UserCreditAwardEntity userCreditAwardEntity = dispatchAwardsAggregate.getUserCreditAwardEntity();
+        UserAwardRecordEntity userAwardRecordEntity = dispatchAwardsAggregate.getUserAwardRecordEntity();
+
+        // 更新发奖记录
+        UserAwardRecord userAwardRecordReq = new UserAwardRecord();
+        userAwardRecordReq.setUserId(userId);
+        userAwardRecordReq.setOrderId(userAwardRecordEntity.getOrderId());
+        userAwardRecordReq.setAwardState(userAwardRecordEntity.getAwardState().getCode());
+
+        // 更新用户积分 「首次则插入数据」
+        UserCreditAccount userCreditAccountReq = new UserCreditAccount();
+        userCreditAccountReq.setUserId(userCreditAwardEntity.getUserId());
+        userCreditAccountReq.setTotalAmount(userCreditAwardEntity.getCreditAmount());
+        userCreditAccountReq.setAvailableAmount(userCreditAwardEntity.getCreditAmount());
+        userCreditAccountReq.setAccountState(AccountStateVO.open.getCode());
+        try{
+            dbRouter.doRouter(userId);
+            transactionTemplate.execute(status -> {
+                try {
+                    // 更新积分
+                    int updateAccountAmount =  userCreditAccountDao.updateAddAmount(userCreditAccountReq);
+                    if(0 == updateAccountAmount){
+                        userCreditAccountDao.insert(userCreditAccountReq);
+                    }
+
+                    // 更新奖品记录
+                    int updateAwardCount = userAwardRecordDao.updateAwardRecordCompletedState(userAwardRecordReq);
+                    if(0 == updateAwardCount){
+                        log.warn("更新中奖记录，重复更新拦截");
+                        status.setRollbackOnly();
+                    }
+
+                    return 1;
+                }catch (DuplicateKeyException e){
+                    status.setRollbackOnly();
+                    log.error("更新中奖记录，唯一索引冲突 userId: {} activityId: {} awardId: {}",
+                            userAwardRecordEntity.getUserId(),
+                            userAwardRecordEntity.getActivityId(),
+                            userAwardRecordEntity.getAwardId());
+                    throw new AppException(ResponseCode.INDEX_DUP.getCode(), e);
+                }catch (Exception e){
+                    log.error("发生错误，定位:\n");
+                    throw new RuntimeException(e);
+                }
+            });
+        }finally {
+            dbRouter.clear();
+        }
+    }
+
+    @Override
+    public String queryAwardKey(Integer awardId) {
+        //todo 此处查询到奖品 key 之后 可以选择存入缓存
+        return awardDao.queryAwardKey(awardId);
     }
 }

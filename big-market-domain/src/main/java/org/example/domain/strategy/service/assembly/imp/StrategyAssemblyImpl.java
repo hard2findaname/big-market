@@ -29,6 +29,7 @@ public class StrategyAssemblyImpl implements IStrategyAssembly, IStrategyDispatc
     @Resource
     private IStrategyRepository strategyRepository;
 
+    private final SecureRandom secureRandom = new SecureRandom();
     @Override
     public boolean assembleLotteryStrategyByActivityId(Long activityId) {
         Long strategyId =  strategyRepository.queryStrategyIdByActivityId(activityId);
@@ -43,32 +44,31 @@ public class StrategyAssemblyImpl implements IStrategyAssembly, IStrategyDispatc
         //2、缓存奖品设【用于扣减库存】
         for(StrategyAwardEntity strategyAward: strategyAwardEntities){
             Integer awardId = strategyAward.getAwardId();
-            //勘误，此处应为设置库存余量
-            //Integer awardCount = strategyAward.getAwardCount();
             Integer awardCount = strategyAward.getAwardCountSurplus();
             cacheStrategyAwardCount(strategyId, awardId, awardCount);
         }
-
-
+        // 3.1
         assembleLotteryStrategy(String.valueOf(strategyId), strategyAwardEntities);
-        //2、权重配置， rule_weight权重规则配置
+
+
+        // 3.2 权重配置， rule_weight权重规则配置
         StrategyEntity strategyEntity = strategyRepository.queryStrategyByStrategyId(strategyId);
         String ruleWeight = strategyEntity.getRuleWeight();
         if(null == ruleWeight) return true;
 
         StrategyRuleEntity strategyRuleEntity = strategyRepository.queryStrategyRule(strategyId, ruleWeight);
-
+        //
         if(null == strategyRuleEntity){
             throw new AppException(ResponseCode.STRATEGY_RULE_WEIGHT_IS_NULL.getCode(),ResponseCode.STRATEGY_RULE_WEIGHT_IS_NULL.getInfo() );
         }
 
-        Map<String, List<Integer>> ruleWeightValues = strategyRuleEntity.getRuleWeightValues();
-        Set<String> keys = ruleWeightValues.keySet();
+        Map<String, List<Integer>> ruleWeightValueMap = strategyRuleEntity.getRuleWeightValues();
+        Set<String> keys = ruleWeightValueMap.keySet();
         for(String key : keys){
-            List<Integer> integers = ruleWeightValues.get(key);
+            List<Integer> ruleWeightValues = ruleWeightValueMap.get(key);
             ArrayList<StrategyAwardEntity> strategyAwardEntitiesCopy = new ArrayList<>(strategyAwardEntities);
-            strategyAwardEntitiesCopy.removeIf(entity->!integers.contains(entity.getAwardId()));
-            assembleLotteryStrategy(String.valueOf(strategyId).concat("_").concat(key), strategyAwardEntitiesCopy);
+            strategyAwardEntitiesCopy.removeIf(entity->!ruleWeightValues.contains(entity.getAwardId()));
+            assembleLotteryStrategy(String.valueOf(strategyId).concat(Constants.UNDERLINE).concat(key), strategyAwardEntitiesCopy);
         }
 
         return true;

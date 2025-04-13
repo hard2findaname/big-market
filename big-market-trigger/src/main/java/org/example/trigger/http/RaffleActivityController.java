@@ -10,7 +10,7 @@ import org.example.domain.activity.service.IRaffleActivityAccountQuotaService;
 import org.example.domain.activity.service.IRaffleActivityPartakeService;
 import org.example.domain.award.service.IAwardService;
 import org.example.domain.award.model.entity.UserAwardRecordEntity;
-import org.example.domain.award.model.valobj.AwardStatusVO;
+import org.example.domain.award.model.valobj.AwardStateVO;
 import org.example.domain.rebate.model.entity.BehaviorEntity;
 import org.example.domain.rebate.model.entity.BehaviorRebateOrderEntity;
 import org.example.domain.rebate.model.valobj.BehaviorTypeVO;
@@ -128,15 +128,15 @@ public class RaffleActivityController implements IRaffleActivityService {
 
             log.info("活动抽奖 userId:{} activityId:{}", request.getUserId(), request.getActivityId());
 
-            // 参数校验
+            // 1. 参数校验
             if(StringUtils.isBlank(request.getUserId()) || null == request.getActivityId()){
                 throw new AppException(ResponseCode.ILLEGAL_PARAMETER.getCode(), ResponseCode.ILLEGAL_PARAMETER.getInfo());
             }
-            // 参与活动 - 创建参与记录
+            // 2. 参与活动 - 创建参与记录
             UserRaffleOrderEntity orderEntity = raffleActivityPartakeService.createOrder(request.getUserId(), request.getActivityId());
-            log.info("写入抽奖单");
-            // 抽奖策略 - 执行抽奖
+            log.info("活动抽奖，创建订单 userId:{} activityId:{} orderId:{}", request.getUserId(), request.getActivityId(), orderEntity.getOrderId());
 
+            // 3. 抽奖策略 - 执行抽奖
             RaffleAwardEntity raffleAwardEntity = raffleStrategy.performRaffle(RaffleFactorEntity.builder()
                     .userId(orderEntity.getUserId())
                     .strategyId(orderEntity.getStrategyId())
@@ -151,7 +151,8 @@ public class RaffleActivityController implements IRaffleActivityService {
                     .awardId(raffleAwardEntity.getAwardId())
                     .awardTitle(raffleAwardEntity.getAwardTitle())
                     .awardTime(new Date())
-                    .awardState(AwardStatusVO.create)
+                    .awardState(AwardStateVO.create)
+                    .awardConfig(raffleAwardEntity.getAwardConfig())
                     .build();
             awardService.saveUserAwardRecord(userAwardRecordEntity);
 
@@ -166,13 +167,13 @@ public class RaffleActivityController implements IRaffleActivityService {
                             .build())
                     .build();
         }catch (AppException e){
-            log.error("活动抽奖失败");
+            log.error("活动抽奖失败", e);
             return Response.<ActivityDrawResponseDTO>builder()
                     .code(e.getCode())
                     .info(e.getInfo())
                     .build();
         }catch (Exception e){
-            log.error("活动抽奖失败");
+            log.error("活动抽奖失败", e);
             return Response.<ActivityDrawResponseDTO>builder()
                     .code(ResponseCode.UN_ERROR.getCode())
                     .info(ResponseCode.UN_ERROR.getInfo())

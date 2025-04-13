@@ -53,21 +53,6 @@ public class RaffleActivityPartakeService extends AbstractRaffleActivityPartake 
         String month = dateFormatMonth.format(currentTime);
         String day = dateFormatDay.format(currentTime);
 
-        // 查询月账户额度
-        ActivityAccountMonthEntity activityAccountMonthEntity = activityRepository.queryActivityAccountMonthByUserId(userId, activityId, month);
-        if(null != activityAccountMonthEntity && activityAccountMonthEntity.getMonthCountSurplus() <=0){
-            throw new AppException(ResponseCode.ACCOUNT_MONTH_QUOTA_ERROR.getCode(), ResponseCode.ACCOUNT_MONTH_QUOTA_ERROR.getInfo());
-        }
-        // 创建月账户额度；true = 存在、false = 不存在
-        boolean isExistAccountMonth  =  null != activityAccountMonthEntity;
-        if(null == activityAccountMonthEntity){
-            activityAccountMonthEntity  = new ActivityAccountMonthEntity();
-            activityAccountMonthEntity.setUserId(userId);
-            activityAccountMonthEntity.setActivityId(activityId);
-            activityAccountMonthEntity.setMonth(month);
-            activityAccountMonthEntity.setMonthCount(activityAccountEntity.getMonthCount());
-            activityAccountMonthEntity.setMonthCountSurplus(activityAccountEntity.getMonthCount());
-        }
         // 查询日账户额度
         ActivityAccountDayEntity activityAccountDayEntity = activityRepository.queryActivityAccountDayByUserId(userId, activityId, day);
         if (null != activityAccountDayEntity && activityAccountDayEntity.getDayCountSurplus() <= 0) {
@@ -83,6 +68,23 @@ public class RaffleActivityPartakeService extends AbstractRaffleActivityPartake 
             activityAccountDayEntity.setDayCount(activityAccountEntity.getDayCount());
             activityAccountDayEntity.setDayCountSurplus(activityAccountEntity.getDayCount());
         }
+        
+        // 查询月账户额度
+        ActivityAccountMonthEntity activityAccountMonthEntity = activityRepository.queryActivityAccountMonthByUserId(userId, activityId, month);
+        if(null != activityAccountMonthEntity && activityAccountMonthEntity.getMonthCountSurplus() <=0){
+            throw new AppException(ResponseCode.ACCOUNT_MONTH_QUOTA_ERROR.getCode(), ResponseCode.ACCOUNT_MONTH_QUOTA_ERROR.getInfo());
+        }
+        // 创建月账户额度；true = 存在、false = 不存在
+        boolean isExistAccountMonth  =  null != activityAccountMonthEntity;
+        if(null == activityAccountMonthEntity){
+            activityAccountMonthEntity  = new ActivityAccountMonthEntity();
+            activityAccountMonthEntity.setUserId(userId);
+            activityAccountMonthEntity.setActivityId(activityId);
+            activityAccountMonthEntity.setMonth(month);
+            activityAccountMonthEntity.setMonthCount(activityAccountEntity.getMonthCount());
+            activityAccountMonthEntity.setMonthCountSurplus(activityAccountEntity.getMonthCount());
+        }
+
         // 构建对象
         CreatePartakeOrderAggregate createPartakeOrderAggregate = new CreatePartakeOrderAggregate();
         createPartakeOrderAggregate.setUserId(userId);
