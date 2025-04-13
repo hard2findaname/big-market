@@ -11,8 +11,9 @@ import org.example.infrastructure.persistent.po.UserCreditAccount;
 @Mapper
 public interface IUserCreditAccountDao {    
 
-
     int updateAddAmount(UserCreditAccount userCreditAccountReq);
 
     void insert(UserCreditAccount userCreditAccountReq);
+
+    UserCreditAccount queryUserCreditAccount(UserCreditAccount userCreditAccountReq);
 }

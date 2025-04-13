@@ -32,12 +32,12 @@ public class UserCreditRandomAward implements IDispatchAward {
 
         String awardConfig = dispatchAwardEntity.getAwardConfig();
 
-        if(StringUtils.isBlank(awardConfig)){
+        if (StringUtils.isBlank(awardConfig)) {
             awardConfig = awardRepository.queryAwardConfig(awardId);
         }
 
         String[] creditRange = awardConfig.split(Constants.SPLIT);
-        if(creditRange.length !=2){
+        if (creditRange.length != 2) {
             throw new RuntimeException("积分值设置不匹配");
         }
         // 生成随机积分
@@ -64,8 +64,8 @@ public class UserCreditRandomAward implements IDispatchAward {
         awardRepository.saveDispatchAwardsAggregate(dispatchAwardsAggregate);
     }
 
-    private BigDecimal generateRandom(BigDecimal min, BigDecimal max){
-        if(min.equals(max)) return min;
+    private BigDecimal generateRandom(BigDecimal min, BigDecimal max) {
+        if (min.equals(max)) return min;
         BigDecimal randomBigDecimal = min.add(BigDecimal.valueOf(Math.random()).multiply(max.subtract(min)));
         return randomBigDecimal.round(new MathContext(3));
     }
