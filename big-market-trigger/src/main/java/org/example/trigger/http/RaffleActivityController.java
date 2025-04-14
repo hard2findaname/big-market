@@ -46,7 +46,6 @@ import java.util.List;
 public class RaffleActivityController implements IRaffleActivityService {
 
 
-
     private final static SimpleDateFormat dateFormatDay = new SimpleDateFormat("yyyyMMdd");
     @Resource
     private IRaffleActivityPartakeService raffleActivityPartakeService;

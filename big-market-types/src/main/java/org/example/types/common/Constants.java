@@ -28,6 +28,7 @@ public class Constants {
 
         public static String ACTIVITY_SKU_COUNT_CLEAR_KEY = "activity_sku_count_clear_key_";
 
+        public static String USER_CREDIT_ACCOUNT_LOCK = "user_credit_account_lock_";
 
     }
 

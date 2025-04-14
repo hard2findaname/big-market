@@ -17,3 +17,6 @@
 /big-market-types/target/
 /big-market-types/target/classes/
 /docs/dev-ops/environment/log/
+/big-market-domain/src/main/java/org/example/domain/credit/model/aggregate/集合对象，对外服务
+/big-market-domain/src/main/java/org/example/domain/credit/model/entity/操作数据库对象
+/big-market-domain/src/main/java/org/example/domain/credit/model/valobj/描述对象属性值
