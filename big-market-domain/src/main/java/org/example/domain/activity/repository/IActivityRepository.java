@@ -21,6 +21,8 @@ public interface IActivityRepository {
     ActivityCountEntity queryRaffleActivityCountByActivityCountId(Long activityCountId);
 
     void doSaveOrder(CreateQuotaOrderAggregate createOrderAggregate);
+    void doSaveCreditPayOrder(CreateQuotaOrderAggregate createQuotaOrderAggregate);
+
 
     void cacheActivitySKUStockCount(String cacheKey, Integer stockCount);
 
@@ -53,4 +55,6 @@ public interface IActivityRepository {
     ActivityAccountEntity queryActivityAccountEntity(Long activityId, String userId);
 
     Integer queryAccountTotalLottery(Long activityId, String userId);
+
+    void updateOrder(DeliveryOrderEntity deliveryOrderEntity);
 }

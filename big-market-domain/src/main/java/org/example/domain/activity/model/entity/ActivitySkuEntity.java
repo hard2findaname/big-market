@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 /**
  * @Author Atticus
  * @date 2024-10-16 22:40 22:40
@@ -26,5 +28,7 @@ public class ActivitySkuEntity {
     private Integer stockCount;
     /** 剩余库存 */
     private Integer stockCountSurplus;
+
+    private BigDecimal productAmount;
 
 }
